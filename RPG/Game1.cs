@@ -308,9 +308,10 @@ namespace RPG
             store.swordHitSnds[4] = Content.Load<SoundEffect>("SwordsClangs1");
             store.swordHitSnds[5] = Content.Load<SoundEffect>("SwordsClangs");
 
-            //TODO 
-            //store.songs[0] = Content.Load<Song>("123");
-            //store.songs[1] = Content.Load<Song>("321");
+            //TODO            
+            
+            store.songs[0] = Content.Load<Song>("Ayreon - Day Seven_ Hope");
+            store.songs[1] = Content.Load<Song>("Slash - Anastasia");
 
             store.arrowTexture = Content.Load<Texture2D>("Arrow");
 
@@ -364,7 +365,7 @@ namespace RPG
             if (MediaPlayer.State == MediaState.Stopped)
             {
                 //TODO вернуть коммент после того, как вернём музыку
-                //MediaPlayer.Play(store.songs[store.r.Next(store.songs.Length) - 1]);
+                MediaPlayer.Play(store.songs[store.r.Next(store.songs.Length)]);
             }
 
             Keys[] keys;
