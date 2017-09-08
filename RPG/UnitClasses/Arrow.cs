@@ -34,7 +34,7 @@ namespace RPG
             texture = _texture;
             position = _position;
             onPlace = false;
-            speed = 3;
+            speed = 10;
             watingTime = 20;
             hited = false;
 
