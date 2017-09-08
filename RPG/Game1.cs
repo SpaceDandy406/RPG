@@ -310,8 +310,8 @@ namespace RPG
 
             //TODO            
             
-            store.songs[0] = Content.Load<Song>("Ayreon - Day Seven_ Hope");
-            store.songs[1] = Content.Load<Song>("Slash - Anastasia");
+            //store.songs[0] = Content.Load<Song>("Ayreon - Day Seven_ Hope");
+            //store.songs[1] = Content.Load<Song>("Slash - Anastasia");
 
             store.arrowTexture = Content.Load<Texture2D>("Arrow");
 
@@ -365,7 +365,7 @@ namespace RPG
             if (MediaPlayer.State == MediaState.Stopped)
             {
                 //TODO вернуть коммент после того, как вернём музыку
-                MediaPlayer.Play(store.songs[store.r.Next(store.songs.Length)]);
+                //MediaPlayer.Play(store.songs[store.r.Next(store.songs.Length)]);
             }
 
             Keys[] keys;
@@ -486,7 +486,7 @@ namespace RPG
 
             foreach (var arrow in arrows)
             {
-                spriteBatch.Draw(arrow.texture, arrow.position, Color.White);
+                arrow.Draw(spriteBatch);
             }
 
             store.select.Draw(spriteBatch);
@@ -572,7 +572,7 @@ namespace RPG
                     {
                         store.arrowShootSnds[store.r.Next(store.arrowShootSnds.Length)].Play();
                         units[i].state = 0;
-                        arrows.Add(new Arrow(store.arrowTexture, new Rectangle(units[i].Location.X + 10, units[i].Location.Y + 10, 30, 5), ref units, i, ai, store.r));
+                        arrows.Add(new Arrow(store.arrowTexture, new Rectangle(units[i].Location.X + 10, units[i].Location.Y + 10, 30, 5), units, i, ai, store.r));
                     }
                 }
                 catch

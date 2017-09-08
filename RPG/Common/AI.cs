@@ -558,38 +558,7 @@ namespace RPG
             }
             return 31;
         }
-
-        public byte ToDestiny(Rectangle pos, int x, int y)
-        {
-            int distantionX = Math.Abs(pos.X - x);
-            int distantionY = Math.Abs(pos.Y - y);
-
-            if (distantionX > distantionY)
-            {
-                if (pos.X < x)
-                {
-                    return 12;
-                }
-                if (pos.X > x)
-                {
-                    return 14;
-                }
-            }
-
-            if (distantionX <= distantionY)
-            {
-                if (pos.Y < y)
-                {
-                    return 13;
-                }
-                if (pos.Y > y)
-                {
-                    return 11;
-                }
-            }
-            return 0;
-        }
-
+        
         public Unit GetUnitOnThis(Point point)
         {
             for (int i = 0; i < units.Count; i++)
