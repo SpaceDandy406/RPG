@@ -389,7 +389,7 @@ namespace RPG
             Way way = new Way();
             Rectangle imagyarylocation = new Rectangle(_location.X, location.Y, location.Width, location.Height);
 
-            way.MoveStates = new List<byte>();
+            way.MoveStates = new List<int>();
 
             Unit nearestEnemy = NearEnemy();
 

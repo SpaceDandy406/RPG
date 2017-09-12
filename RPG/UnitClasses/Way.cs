@@ -7,6 +7,6 @@ namespace RPG
 {
     struct Way
     {
-        public List<byte> MoveStates;
+        public List<int> MoveStates;
     }
 }
