@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="Comander.cs" />
     <Compile Include="Common\AI.cs" />
     <Compile Include="Common\CheckBox.cs" />

@@ -33,7 +33,7 @@ namespace RPG
 
             ChangeTextureForNormal();
 
-            way.MoveStates = new List<byte>();
+            way.MoveStates = new List<int>();
             
             effects = new List<UnitEffect>();
 
@@ -299,7 +299,7 @@ namespace RPG
             return false;
         }
 
-        public void Wound(byte atack)
+        public void Wound(int atack)
         {
             unitProps.unitStats.health -= atack;
             unitProps.healthBar.Width = (int)((double)unitProps.unitStats.health / (double)unitProps.unitStats.maxHealth * Location.Width);

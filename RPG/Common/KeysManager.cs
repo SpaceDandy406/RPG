@@ -1,17 +1,31 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace RPG.Common
 {
     internal class KeysManager
     {
+        private KeyboardState _previoseState;
+        private KeyboardState _currentState;
+
         public byte ButtonTimeLeft;
-        public bool IsPressedKeys(out Keys[] keys)
+
+        public void UpdateKeysState()
+        {
+            _previoseState = _currentState;
+            _currentState = Keyboard.GetState();
+
+            
+        }
+
+        public bool IsPressingKeys(out Keys[] keys)
         {
             keys = null;
-            var pressedKeys = Keyboard.GetState().GetPressedKeys();
+            var pressedKeys = _currentState.GetPressedKeys();
 
-            if (!pressedKeys.Any() || ButtonTimeLeft > 0)
+            if (!pressedKeys.Any())
                 return false;
             
 
@@ -21,7 +35,22 @@ namespace RPG.Common
             return true;
         }
 
-        public void Upgrade()
+        public bool IsPressedKeys(out Keys[] keys)
+        {
+            keys = new Keys[0];
+
+            var pressingKeys = _currentState.GetPressedKeys();
+            var pressedKeys = _previoseState.GetPressedKeys();
+
+            var isEqual = pressingKeys.SequenceEqual(pressedKeys);
+
+            if (isEqual)
+                keys = pressingKeys;
+
+            return isEqual;
+        }
+
+        public void Update()
         {
             if (ButtonTimeLeft > 0)
             {

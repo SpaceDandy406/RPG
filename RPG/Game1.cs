@@ -27,6 +27,7 @@ namespace RPG
         List<Unit> units;
         KeysManager keysManager = new KeysManager();
         WindowStateContext context;
+        Camera camera;
 
         public Game1()
         {
@@ -49,6 +50,7 @@ namespace RPG
             store.pauseCheck = true;
 
             context = new WindowStateContext(this);
+            
 
         }
 
@@ -272,6 +274,10 @@ namespace RPG
                 unit.ai = ai;
             }
 
+            camera = new Camera(keysManager);
+
+            camera.Pos = new Vector2(500.0f, 200.0f);
+
 
         }
 
@@ -357,6 +363,8 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            keysManager.UpdateKeysState();
+
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -367,15 +375,12 @@ namespace RPG
                 //TODO вернуть коммент после того, как вернём музыку
                 MediaPlayer.Play(store.songs[store.r.Next(store.songs.Length)]);
             }
-
+            
             Keys[] keys;
-
-
-
-            if ((Keyboard.GetState().IsKeyDown(Keys.Space)) && keysManager.ButtonTimeLeft == 0)
+            
+            if ((Keyboard.GetState().IsKeyDown(Keys.Space)))
             {
                 store.pauseCheck = !store.pauseCheck;
-                keysManager.PressKey();
             }
 
             if (!store.pauseCheck)
@@ -384,9 +389,8 @@ namespace RPG
             }
 
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && keysManager.ButtonTimeLeft == 0)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                keysManager.PressKey();
                 bool isCatch = false;
                 bool isUnit = false;
                 foreach (var unit in units)
@@ -439,19 +443,22 @@ namespace RPG
 
             }
 
-            if (Mouse.GetState().RightButton == ButtonState.Pressed && keysManager.ButtonTimeLeft == 0 && store.createUnitForm.visioble)
+            if (Mouse.GetState().RightButton == ButtonState.Pressed && store.createUnitForm.visioble)
             {
                 store.select.SetBorders(new Rectangle(Mouse.GetState().X - 25, Mouse.GetState().Y - 25, 50, 50));
             }
 
-            if (keysManager.IsPressedKeys(out keys) && store.createUnitForm.visioble)
+            if (keysManager.IsPressingKeys(out keys) && store.createUnitForm.visioble)
             {
                 store.createUnitForm.Upgrade(keys.First());
             }
 
 
-            keysManager.Upgrade();
-            store.select.Upgrade();
+            camera.Update();
+
+
+            
+            store.select.Update();
 
             base.Update(gameTime);
         }
@@ -467,8 +474,15 @@ namespace RPG
 
             // TODO: Add your drawing code here
 
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
 
+            spriteBatch.Begin(SpriteSortMode.BackToFront,
+                        BlendState.AlphaBlend,
+                        null,
+                        null,
+                        null,
+                        null,
+                        camera.get_transformation(GraphicsDevice));
 
 
             foreach (var border in store.borders)

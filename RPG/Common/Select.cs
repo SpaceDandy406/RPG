@@ -35,7 +35,7 @@ namespace RPG
         }
 
 
-        public void Upgrade()
+        public void Update()
         {
             if (time > 0)
             {
