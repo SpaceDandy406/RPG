@@ -544,7 +544,7 @@ namespace RPG
 
         public void UnitsAction()
         {
-            for (int i = 0; i < units.Count; i++)
+            for (var i = 0; i < units.Count; i++)
             {
                 try
                 {
@@ -572,7 +572,11 @@ namespace RPG
                     {
                         store.arrowShootSnds[store.r.Next(store.arrowShootSnds.Length)].Play();
                         units[i].state = 0;
-                        arrows.Add(new Arrow(store.arrowTexture, new Rectangle(units[i].Location.X + 10, units[i].Location.Y + 10, 30, 5), units, i, ai, store.r));
+
+                        var startPosition = new Vector2(units[i].Location.X + 10, units[i].Location.Y + 10);
+                        var newArrow = new Arrow(store.arrowTexture, startPosition, units, i, ai, store.r);
+
+                        arrows.Add(newArrow);
                     }
                 }
                 catch
@@ -593,14 +597,14 @@ namespace RPG
 
             for (int i = 0; i < arrows.Count; i++)
             {
-                if (arrows[i].onPlace && !arrows[i].hited)
+                if (arrows[i]._isAchievedDestiny && !arrows[i]._isHitted)
                 {
                     store.arrowHitSnds[store.r.Next(store.arrowHitSnds.Length)].Play();
                 }
 
                 arrows[i].Update();
 
-                if (arrows[i].watingTime == 0)
+                if (arrows[i]._watingTime == 0)
                 {
                     arrows.RemoveAt(i);
                 }

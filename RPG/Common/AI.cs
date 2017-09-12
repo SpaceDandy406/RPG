@@ -559,16 +559,20 @@ namespace RPG
             return 31;
         }
         
-        public Unit GetUnitOnThis(Point point)
+        public bool TryGetUnitByPoint(Vector2 point, out Unit targetUnit)
         {
-            for (int i = 0; i < units.Count; i++)
+            targetUnit = null;
+
+            for (var i = 0; i < units.Count; i++)
             {
-                if (units[i].IsCatch(point.X, point.Y))
+                if (units[i].IsCatch((int)point.X, (int)point.Y))
                 {
-                    return units[i];
+                    targetUnit = units[i];
+                    return true;
                 }
             }
-            return null;
+
+            return false;
         }
     }
 }

@@ -1,166 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RPG
 {
-    class Arrow
+    internal class Arrow
     {
-        public Texture2D texture;
-        public Rectangle position;
-        public Point destiny;
-        public byte speed;
-        public Unit owner;
-        public byte watingTime;
-        public bool onPlace;
-        public bool hited;
-        public double angle;
-        public AI ai;
-        public double X;
-        public double Y;
-        public double dx;
-        public double dy;
+        private Texture2D _texture;
+        private Vector2 _currentPosition;
+        private Point _targetPoint;
+        private int _speed;
+        private Unit _owner;
+        private double _angle;
+        private AI _ai;
 
+        public byte _watingTime;
+        public bool _isAchievedDestiny;
+        public bool _isHitted;
 
-        public Arrow(Texture2D _texture, Rectangle _position, List<Unit> units, int i, AI _ai, Random _r)
+        public Arrow(Texture2D texture, Vector2 position, IReadOnlyList<Unit> units, int i, AI ai, Random _r)
         {
-            Random r = _r;
-            owner = units[i];
-            ai = _ai;
-            texture = _texture;
-            position = _position;
-            onPlace = false;
-            speed = 10;
-            watingTime = 20;
-            hited = false;
+            var r = _r;
+            _owner = units[i];
+            _ai = ai;
+            _texture = texture;
+            _currentPosition = position;
+            _isAchievedDestiny = false;
+            _speed = 7;
+            _watingTime = 20;
+            _isHitted = false;
 
-            destiny = CalculateDestinyPoint(r, ai.Dist(owner.Location, owner.aim.Location));
+            var distantion = _ai.Dist(_owner.Location, _owner.aim.Location);
+            _targetPoint = CalculateTargetPoint(r, distantion);
         }
 
-        private Point CalculateDestinyPoint(Random r, int distantion)
+        private Point CalculateTargetPoint(Random r, int distantion)
         {
-            destiny = new Point();
+            var targetPoint = new Point();
+            var maxRandomValue = distantion / _owner.unitProps.unitStats.shootAccuracy;
 
-            if (r.Next(2) == 0)
-            {
-                destiny.X = owner.aim.Location.Center.X + r.Next(distantion/owner.unitProps.unitStats.shootAccuracy);
-            }
-            else
-            {
-                destiny.X = owner.aim.Location.Center.X - r.Next(distantion/owner.unitProps.unitStats.shootAccuracy);
-            }
-            if (r.Next(2) == 0)
-            {
-                destiny.Y = owner.aim.Location.Center.Y + r.Next(distantion/owner.unitProps.unitStats.shootAccuracy);
-            }
-            else
-            {
-                destiny.Y = owner.aim.Location.Center.Y - r.Next(distantion/owner.unitProps.unitStats.shootAccuracy);
-            }
+            targetPoint.X = _owner.aim.Location.Center.X + r.Next(-maxRandomValue, maxRandomValue);
+            targetPoint.Y = _owner.aim.Location.Center.Y + r.Next(-maxRandomValue, maxRandomValue);
 
-            return destiny;
-        }
-
-        public Unit Victim()
-        {
-            return ai.GetUnitOnThis(new Point(position.X, position.Y));
+            return targetPoint;
         }
 
         private void Move()
         {
-            angle = Math.Atan((double)Math.Abs(destiny.Y - position.Y) / Math.Abs(destiny.X - position.X));
-            
-            dx = Math.Cos(angle) * speed;
-            if (destiny.X < position.X)
+            //TODO: _angle можно считать один раз, нужно вынести в переменную класса.
+            //dx, dy обернуть в Vector2. 
+            _angle = Math.Atan((double)Math.Abs(_targetPoint.Y - _currentPosition.Y) / Math.Abs(_targetPoint.X - _currentPosition.X));
+
+            var dx = Math.Cos(_angle) * _speed;
+            if (_targetPoint.X < _currentPosition.X)
                 dx = -dx;
 
-            dy = Math.Sin(angle) * speed;
-            if (destiny.Y < position.Y)
+            var dy = Math.Sin(_angle) * _speed;
+            if (_targetPoint.Y < _currentPosition.Y)
                 dy = -dy;
 
-            position.X += (int)Math.Round(dx);
-            position.Y += (int)Math.Round(dy);
+            _currentPosition.X += (int)Math.Round(dx);
+            _currentPosition.Y += (int)Math.Round(dy);
 
-        }
-
-        private bool IsPlace()
-        {
-            if (ai.Dist(position.X, position.Y, destiny.X, destiny.Y) < speed)
-                return true;
-            return false;
         }
 
         public void Update()
         {
-            if (IsPlace())
-            {
-                if (!hited)
-                {
-                    position.X = destiny.X;
-                    position.Y = destiny.Y;
+            var distanceToDestiny = _ai.Dist((int)_currentPosition.X, (int)_currentPosition.Y, _targetPoint.X, _targetPoint.Y);
 
-                    hited = true;
-                    Unit vic = Victim();
-                    if (vic != null)
-                    {
-                        vic.Wound(owner.unitProps.unitStats.rangeAtackPower);
-                        vic.hiter = owner;
-                    }
-                }
-                watingTime--;
+            _isAchievedDestiny = (distanceToDestiny < _speed);
+
+            if (!_isAchievedDestiny)
+            {
+                Move();
             }
             else
             {
-                Move();
+                _watingTime--;
+
+                if (_isHitted)
+                    return;
+
+                _isHitted = true;
+                _currentPosition.X = _targetPoint.X;
+                _currentPosition.Y = _targetPoint.Y;
+
+                Unit targetUnit;
+                if (!_ai.TryGetUnitByPoint(_currentPosition, out targetUnit))
+                    return;
+
+                targetUnit.Wound(_owner.unitProps.unitStats.rangeAtackPower);
+                targetUnit.hiter = _owner;
             }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var angle1 = Math.Atan((double) (destiny.Y - position.Y) / (destiny.X - position.X));
+            var drawAngle = Math.Atan((double)(_targetPoint.Y - _currentPosition.Y) / (_targetPoint.X - _currentPosition.X));
+            var movedLeft = (_targetPoint.X < _currentPosition.X);
+            var rotationVector = Vector2.Zero;
+            var effect = SpriteEffects.None;
 
-            //if (hited)
-            //{
-            //    spriteBatch.Draw(texture,
-            //        new Vector2(position.X, position.Y),
-            //        null,
-            //        Color.White,
-            //        1.5f,
-            //        Vector2.Zero,
-            //        0.15f,
-            //        SpriteEffects.None,
-            //        0);
-            //}
-            //else
-            //{
-            if (destiny.X < position.X)
+            if (_isHitted)
             {
-                spriteBatch.Draw(texture,
-                    new Vector2(position.X, position.Y),
-                    null,
-                    Color.White,
-                    (float) angle1,
-                    Vector2.Zero,
-                    0.15f,
-                    SpriteEffects.FlipHorizontally,
-                    0);
+                rotationVector = new Vector2(_texture.Width * 0.075f, _texture.Height * 0.075f);
+                drawAngle = 1.5f;
             }
-            else
+            else if (movedLeft)
             {
-                spriteBatch.Draw(texture,
-                    new Vector2(position.X, position.Y),
-                    null,
-                    Color.White,
-                    (float)angle1,
-                    Vector2.Zero,
-                    0.15f,
-                    SpriteEffects.None,
-                    0);
+                effect = SpriteEffects.FlipHorizontally;
             }
+
+            spriteBatch.Draw(_texture, _currentPosition, null, Color.White, (float)drawAngle,
+                rotationVector, 0.15f, effect, 0);
         }
     }
 }
