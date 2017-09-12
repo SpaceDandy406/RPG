@@ -11,8 +11,8 @@ namespace RPG
      class Unit: GameObject
     {
         public UnitProps unitProps;
-        public byte state;
-        public ushort relaxTime;
+        public int state;
+        public int relaxTime;
 
         public AI ai;
 

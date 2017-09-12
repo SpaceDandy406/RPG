@@ -7,18 +7,18 @@ namespace RPG
 {
     struct UnitStats
     {
-        public short health;
-        public short maxHealth;
-        public byte atack;
-        public byte atackTime;
-        public ushort atackRange;
-        public byte defenceTime;
-        public byte level;
+        public int health;
+        public int maxHealth;
+        public int atack;
+        public int atackTime;
+        public int atackRange;
+        public int defenceTime;
+        public int level;
         public bool rangeUnit;
-        public byte rangeAtackPower;
-        public ushort rangeAtackRange;
-        public ushort rangeAtackTime;
-        public byte speed;
-        public byte shootAccuracy;
+        public int rangeAtackPower;
+        public int rangeAtackRange;
+        public int rangeAtackTime;
+        public int speed;
+        public int shootAccuracy;
     }
 }
