@@ -15,9 +15,9 @@ namespace RPG
         private double _angle;
         private AI _ai;
 
-        public byte _watingTime;
-        public bool _isAchievedDestiny;
-        public bool _isHitted;
+        public byte WatingTime;
+        public bool IsAchievedDestiny;
+        public bool IsHitted;
 
         public Arrow(Texture2D texture, Vector2 position, IReadOnlyList<Unit> units, int i, AI ai, Random _r)
         {
@@ -26,10 +26,10 @@ namespace RPG
             _ai = ai;
             _texture = texture;
             _currentPosition = position;
-            _isAchievedDestiny = false;
+            IsAchievedDestiny = false;
             _speed = 7;
-            _watingTime = 20;
-            _isHitted = false;
+            WatingTime = 20;
+            IsHitted = false;
 
             var distantion = _ai.Dist(_owner.Location, _owner.aim.Location);
             _targetPoint = CalculateTargetPoint(r, distantion);
@@ -69,20 +69,20 @@ namespace RPG
         {
             var distanceToDestiny = _ai.Dist((int)_currentPosition.X, (int)_currentPosition.Y, _targetPoint.X, _targetPoint.Y);
 
-            _isAchievedDestiny = (distanceToDestiny < _speed);
+            IsAchievedDestiny = (distanceToDestiny < _speed);
 
-            if (!_isAchievedDestiny)
+            if (!IsAchievedDestiny)
             {
                 Move();
             }
             else
             {
-                _watingTime--;
+                WatingTime--;
 
-                if (_isHitted)
+                if (IsHitted)
                     return;
 
-                _isHitted = true;
+                IsHitted = true;
                 _currentPosition.X = _targetPoint.X;
                 _currentPosition.Y = _targetPoint.Y;
 
@@ -102,7 +102,7 @@ namespace RPG
             var rotationVector = Vector2.Zero;
             var effect = SpriteEffects.None;
 
-            if (_isHitted)
+            if (IsHitted)
             {
                 rotationVector = new Vector2(_texture.Width * 0.075f, _texture.Height * 0.075f);
                 drawAngle = 1.5f;

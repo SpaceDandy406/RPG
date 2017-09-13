@@ -597,14 +597,14 @@ namespace RPG
 
             for (int i = 0; i < arrows.Count; i++)
             {
-                if (arrows[i]._isAchievedDestiny && !arrows[i]._isHitted)
+                if (arrows[i].IsAchievedDestiny && !arrows[i].IsHitted)
                 {
                     store.arrowHitSnds[store.r.Next(store.arrowHitSnds.Length)].Play();
                 }
 
                 arrows[i].Update();
 
-                if (arrows[i]._watingTime == 0)
+                if (arrows[i].WatingTime == 0)
                 {
                     arrows.RemoveAt(i);
                 }
