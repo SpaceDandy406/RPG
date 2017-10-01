@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPG.Common
 {
@@ -37,7 +33,6 @@ namespace RPG.Common
             }
             r -= 6;
             return r;
-
         }
 
         public static double NextDoubleNormal(double m, double sigma)

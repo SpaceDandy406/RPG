@@ -88,6 +88,5 @@ namespace RPG.UnitTests.Core.Random
             // Assert
             Assert.AreNotEqual(x1, x2);
         }
-
     }
 }
