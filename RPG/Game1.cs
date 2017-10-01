@@ -99,7 +99,7 @@ namespace RPG
             uStats.unitStats.rangeAtackRange = 0;
             uStats.unitStats.rangeAtackTime = 0;
             uStats.unitStats.speed = 1;
-            uStats.unitStats.shootAccuracy = 5;
+            uStats.unitStats.shootAccuracy = 15;
 
             List<byte> commonBytes = new List<byte>();
 
@@ -137,10 +137,10 @@ namespace RPG
             uStats.unitStats.maxHealth = 50;
             uStats.unitStats.level = 0;
             uStats.unitStats.rangeUnit = true;
-            uStats.unitStats.rangeAtackPower = 5;
+            uStats.unitStats.rangeAtackPower = 1.1;
             uStats.unitStats.rangeAtackRange = 600;
-            uStats.unitStats.rangeAtackTime = 600;
-            uStats.unitStats.shootAccuracy = 5;
+            uStats.unitStats.rangeAtackTime = 700;
+            uStats.unitStats.shootAccuracy = 15;
 
             for (int i = 0; i < 8; i++)
             {
@@ -186,7 +186,7 @@ namespace RPG
             uStats1.unitStats.rangeAtackRange = 0;
             uStats1.unitStats.rangeAtackTime = 0;
             uStats1.unitStats.speed = 1;
-            uStats1.unitStats.shootAccuracy = 5;
+            uStats1.unitStats.shootAccuracy = 15;
 
             commonBytes.Clear();
 
@@ -224,10 +224,10 @@ namespace RPG
             uStats1.unitStats.maxHealth = 50;
             uStats1.unitStats.level = 0;
             uStats1.unitStats.rangeUnit = true;
-            uStats1.unitStats.rangeAtackPower = 4;
+            uStats1.unitStats.rangeAtackPower = 1;
             uStats1.unitStats.rangeAtackRange = 600;
-            uStats1.unitStats.rangeAtackTime = 500;
-            uStats1.unitStats.shootAccuracy = 5;
+            uStats1.unitStats.rangeAtackTime = 600;
+            uStats1.unitStats.shootAccuracy = 15;
 
             for (int i = 0; i < 8; i++)
             {
