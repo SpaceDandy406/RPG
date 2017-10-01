@@ -14,6 +14,7 @@ namespace RPG
         private Unit _owner;
         private double _angle;
         private AI _ai;
+        private double _damage;
 
         public byte WatingTime;
         public bool IsAchievedDestiny;
@@ -30,6 +31,7 @@ namespace RPG
             _speed = 7;
             WatingTime = 20;
             IsHitted = false;
+            _damage = _owner.unitProps.unitStats.rangeAtackPower * 7;
 
             var distantion = _ai.Dist(_owner.Location, _owner.aim.Location);
             _targetPoint = CalculateTargetPoint(r, distantion);
@@ -40,8 +42,8 @@ namespace RPG
             var targetPoint = new Point();
             var maxRandomValue = distantion / _owner.unitProps.unitStats.shootAccuracy;
 
-            targetPoint.X = _owner.aim.Location.Center.X + r.Next(-maxRandomValue, maxRandomValue);
-            targetPoint.Y = _owner.aim.Location.Center.Y + r.Next(-maxRandomValue, maxRandomValue);
+            targetPoint.X = _owner.aim.Location.Center.X + r.Next((int)-maxRandomValue, (int)maxRandomValue);
+            targetPoint.Y = _owner.aim.Location.Center.Y + r.Next((int)-maxRandomValue, (int)maxRandomValue);
 
             return targetPoint;
         }
@@ -90,7 +92,7 @@ namespace RPG
                 if (!_ai.TryGetUnitByPoint(_currentPosition, out targetUnit))
                     return;
 
-                targetUnit.Wound(_owner.unitProps.unitStats.rangeAtackPower);
+                targetUnit.Wound(_damage);
                 targetUnit.hiter = _owner;
             }
         }
