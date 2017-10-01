@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 
 namespace RPG
@@ -12,7 +9,7 @@ namespace RPG
     {
         public UnitProps unitProps;
         public int state;
-        public int relaxTime;
+        public double relaxTime;
 
         public AI ai;
 
@@ -210,62 +207,62 @@ namespace RPG
         {
             if (state == 11)
             {
-                Location.Y -= unitProps.unitStats.speed;
-                unitProps.healthBar.Y -= unitProps.unitStats.speed;
+                Location.Y -= (int)Math.Round(unitProps.unitStats.speed);
+                unitProps.healthBar.Y -= (int)Math.Round(unitProps.unitStats.speed);
                 for (int i = 0; i < unitProps.stars.Count; i++)
                 {
                     Rectangle st = unitProps.stars[i];
-                    st.Y -= unitProps.unitStats.speed;
+                    st.Y -= (int)Math.Round(unitProps.unitStats.speed);
                     unitProps.stars[i] = st;
                 }
                 foreach (var effect in effects)
                 {
-                    effect.position.Y -= unitProps.unitStats.speed;
+                    effect.position.Y -= (int)Math.Round(unitProps.unitStats.speed);
                 }
             }
             if (state == 12)
             {
-                Location.X += unitProps.unitStats.speed;
-                unitProps.healthBar.X += unitProps.unitStats.speed;
+                Location.X += (int)Math.Round(unitProps.unitStats.speed);
+                unitProps.healthBar.X += (int)Math.Round(unitProps.unitStats.speed);
                 for (int i = 0; i < unitProps.stars.Count; i++)
                 {
                     Rectangle st = unitProps.stars[i];
-                    st.X += unitProps.unitStats.speed;
+                    st.X += (int)Math.Round(unitProps.unitStats.speed);
                     unitProps.stars[i] = st;
                 }
                 foreach (var effect in effects)
                 {
-                    effect.position.X += unitProps.unitStats.speed;
+                    effect.position.X += (int)Math.Round(unitProps.unitStats.speed);
                 }
             }
             if (state == 13)
             {
-                Location.Y += unitProps.unitStats.speed;
-                unitProps.healthBar.Y += unitProps.unitStats.speed;
+                Location.Y += (int)Math.Round(unitProps.unitStats.speed);
+                unitProps.healthBar.Y += (int)Math.Round(unitProps.unitStats.speed);
                 for (int i = 0; i < unitProps.stars.Count; i++)
                 {
                     Rectangle st = unitProps.stars[i];
-                    st.Y += unitProps.unitStats.speed;
+                    st.Y += (int)Math.Round(unitProps.unitStats.speed);
                     unitProps.stars[i] = st;
                 }
                 foreach (var effect in effects)
                 {
-                    effect.position.Y += unitProps.unitStats.speed;
+                    effect.position.Y += (int)Math.Round(unitProps.unitStats.speed);
                 }
             }
             if (state == 14)
             {
-                Location.X -= unitProps.unitStats.speed;
-                unitProps.healthBar.X -= unitProps.unitStats.speed;
+                Location.X -= (int)Math.Round(unitProps.unitStats.speed);
+                unitProps.healthBar.X -= (int)Math.Round(unitProps.unitStats.speed);
                 for (int i = 0; i < unitProps.stars.Count; i++)
                 {
                     Rectangle st = unitProps.stars[i];
-                    st.X -= unitProps.unitStats.speed;
+                    st.X -= (int)Math.Round(unitProps.unitStats.speed);
                     unitProps.stars[i] = st;
                 }
                 foreach (var effect in effects)
                 {
-                    effect.position.X -= unitProps.unitStats.speed;
+                    effect.position.X -= (int)Math.Round(unitProps.unitStats.speed);
                 }
             }
         }
@@ -274,10 +271,10 @@ namespace RPG
         {
             unitProps.stars.Add(new Rectangle(Location.X + unitProps.stars.Count * 14, Location.Y + Location.Height - 15, 12, 12));
             unitProps.unitStats.atack += 2;
-            unitProps.unitStats.rangeAtackPower += 2;
+            unitProps.unitStats.rangeAtackPower += 0.2;
             unitProps.unitStats.atackTime = (byte)(unitProps.unitStats.atackTime * 0.9);
             unitProps.unitStats.rangeAtackTime = (ushort)(unitProps.unitStats.rangeAtackTime * 0.9);
-            unitProps.unitStats.shootAccuracy++;
+            unitProps.unitStats.shootAccuracy += 0.4;
         }
 
         public void DistributeCommons(List<byte> commons)
@@ -299,10 +296,10 @@ namespace RPG
             return false;
         }
 
-        public void Wound(int atack)
+        public void Wound(double atack)
         {
             unitProps.unitStats.health -= atack;
-            unitProps.healthBar.Width = (int)((double)unitProps.unitStats.health / (double)unitProps.unitStats.maxHealth * Location.Width);
+            unitProps.healthBar.Width = (int)(unitProps.unitStats.health / unitProps.unitStats.maxHealth * Location.Width);
             effects.Add(new UnitEffect("damage", unitProps.damageTexture, Location, 7));
         }
 
